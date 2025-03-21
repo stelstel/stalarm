@@ -68,7 +68,8 @@ for symbol in symbols:
         warning = abs(percentage_value_change) > alarm_limit and percentage_value_change < 0
 
     except Exception as e:
-        print(f"Error fetching data for {symbol}: {e}")
+        msg_to_user = f"Error fetching data for {symbol}, Is this symbol correct? Check at https://finance.yahoo.com/lookup/"
+        print(f"Error fetching data for {symbol}: {e}") #/////////////////////////////////////////////////////////////
         company_name = "N/A"
         opening_value = "N/A"
         last_value = "N/A"
