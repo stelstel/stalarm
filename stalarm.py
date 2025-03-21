@@ -1,6 +1,6 @@
 # stalarm.py
 # Author: Stefan Elmgren
-# Date: 2021-09-30
+# Date: 2025-03-21
 # Description: A simple stock alarm program that reads stock data from Yahoo Finance and compares the opening value with the last value. 
 #   If the percentage change exceeds a certain limit, the program displays a warning.
 
@@ -8,6 +8,8 @@ import yfinance as yahooFinance
 import os
 import configparser
 import pandas as pd
+
+# TODO add update_frequency to config.ini
 
 os.system('cls')
 
@@ -25,7 +27,8 @@ def read_config_ini():
 
     # Load the config file
     config = configparser.ConfigParser()
-    config.read("config.ini")
+    config_file = "config.ini"
+    config.read(config_file)
 
     # Read stock symbols
     symbols = config["stocks"]["symbols"].split(", ")  # Converts to a list
@@ -58,7 +61,7 @@ for symbol in symbols:
         "Company name": company_name,
         "Opening value": opening_value,
         "last value": last_value,
-        "Change": percentage_value_change,
+        "Change %": percentage_value_change,
         "Warning": warning
     })
 
