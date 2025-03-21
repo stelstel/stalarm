@@ -1,3 +1,9 @@
+# stalarm.py
+# Author: Stefan Elmgren
+# Date: 2021-09-30
+# Description: A simple stock alarm program that reads stock data from Yahoo Finance and compares the opening value with the last value. 
+#   If the percentage change exceeds a certain limit, the program displays a warning.
+
 import yfinance as yahooFinance
 import os
 import configparser
@@ -6,6 +12,17 @@ import pandas as pd
 os.system('cls')
 
 def read_config_ini():
+    """
+    Reads configuration data from a .ini file, extracting stock symbols and an alarm limit.
+    
+    The function loads a configuration file (`config.ini`), retrieves stock symbols as a list, 
+    and converts the alarm limit into a float.
+
+    Returns:
+        symbols (list): A list of stock symbols (e.g., ["META", "AMZN"]).
+        alarm_limit (float): The alarm limit value, converted to float (e.g., 2.50).
+    """
+
     # Load the config file
     config = configparser.ConfigParser()
     config.read("config.ini")
@@ -25,41 +42,28 @@ stock_data = []
 
 for symbol in symbols:
     stock_info = yahooFinance.Ticker(symbol)
-    print(symbol)
     company_name = stock_info.info.get("longName", "N/A")
-    print(company_name)
     latest_data = stock_info.history(period="1d")
-    print(latest_data["Open"].iloc[-1]) # -1 means "the last row" in the DataFrame
     opening_value = latest_data["Open"].iloc[-1] # -1 means "the last row" in the DataFrame
     last_value = stock_info.fast_info["last_price"]
-    print(stock_info.fast_info["last_price"])  # Latest stock price
+    percentage_value_change = ((last_value - opening_value) / opening_value) * 100
+
+    warning = False
+
+    if abs(percentage_value_change) > alarm_limit and percentage_value_change < 0:
+        warning = True
 
     stock_data.append({
-        "symbol": symbol,
-        "company_name": company_name,
-        "opening_value": opening_value,
-        "last_value": last_value
+        "Symbol": symbol,
+        "Company name": company_name,
+        "Opening value": opening_value,
+        "last value": last_value,
+        "Change": percentage_value_change,
+        "Warning": warning
     })
 
 # Create a DataFrame with the collected data
 df_stock_data = pd.DataFrame(stock_data)
 
 # Display the DataFrame
-print(df_stock_data)
-
-# print(symbols)      # ['META', 'AMZN', 'AAPL', 'TSLA']
-# print(alarm_limit)  # 2.50
-
-# # Here We are getting Facebook financial information
-# # We need to pass FB as argument for that
-# GetFacebookInformation = yahooFinance.Ticker("META")
- 
-# # whole python dictionary is printed here
-# # print(GetFacebookInformation.info)
-# #print(GetFacebookInformation.history(period="1d"))
-
-# latest_data = GetFacebookInformation.history(period="1d")
-
-# print(latest_data["Open"].iloc[-1]) # -1 means "the last row" in the DataFrame
-
-# print(GetFacebookInformation.fast_info["last_price"])  # Latest stock price
+print(df_stock_data.to_string(index=False))
