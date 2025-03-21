@@ -31,7 +31,8 @@ def read_config_ini():
     config.read(config_file)
 
     # Read stock symbols
-    symbols = config["stocks"]["symbols"].split(", ")  # Converts to a list
+    stock_symbols = config["stocks"]["symbols"].replace(" ", "")
+    symbols = stock_symbols.split(",")  # Converts to a list
 
     # Read alarm limit as float
     alarm_limit = float(config["settings"]["alarm_limit"])
