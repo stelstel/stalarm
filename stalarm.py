@@ -1,7 +1,21 @@
 import yfinance as yahooFinance
 import os
+import configparser
 
 os.system('cls')
+
+# Load the config file
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+# Read stock symbols
+symbols = config["stocks"]["symbols"].split(", ")  # Converts to a list
+
+# Read alarm limit as float
+alarm_limit = float(config["settings"]["alarm_limit"])
+
+print(symbols)      # ['META', 'AMZN', 'AAPL', 'TSLA']
+print(alarm_limit)  # 2.50
 
 # Here We are getting Facebook financial information
 # We need to pass FB as argument for that
