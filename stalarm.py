@@ -9,8 +9,7 @@ import os
 import configparser
 import pandas as pd
 
-# TODO add update_frequency to config.ini
-
+# Clear console
 os.system('cls')
 
 def read_config_ini():
@@ -31,7 +30,7 @@ def read_config_ini():
     config.read(config_file)
 
     # Read stock symbols
-    stock_symbols = config["stocks"]["symbols"].replace(" ", "")
+    stock_symbols = config["stocks"]["symbols"].replace(" ", "")  # Removes spaces
     symbols = stock_symbols.split(",")  # Converts to a list
 
     # Read alarm limit as float
@@ -40,28 +39,47 @@ def read_config_ini():
     return symbols, alarm_limit
 
 
+# Read configuration
 symbols, alarm_limit = read_config_ini()
 
+# List to store stock data
 stock_data = []
 
 for symbol in symbols:
-    stock_info = yahooFinance.Ticker(symbol)
-    company_name = stock_info.info.get("longName", "N/A")
-    latest_data = stock_info.history(period="1d")
-    opening_value = latest_data["Open"].iloc[-1] # -1 means "the last row" in the DataFrame
-    last_value = stock_info.fast_info["last_price"]
-    percentage_value_change = ((last_value - opening_value) / opening_value) * 100
+    try:
+        stock_info = yahooFinance.Ticker(symbol)
 
-    warning = False
+        # Fetch stock data
+        stock_data_dict = stock_info.get_info()
+        if not stock_data_dict:
+            raise ValueError(f"No data available for {symbol}")
 
-    if abs(percentage_value_change) > alarm_limit and percentage_value_change < 0:
-        warning = True
+        company_name = stock_data_dict.get("longName", "N/A")
+
+        # Get historical data
+        latest_data = stock_info.history(period="1d")
+        if latest_data.empty:
+            raise ValueError(f"No historical data available for {symbol}")
+
+        opening_value = latest_data["Open"].iloc[-1]  # Last available opening price
+        last_value = stock_info.fast_info["last_price"]
+        percentage_value_change = ((last_value - opening_value) / opening_value) * 100
+
+        warning = abs(percentage_value_change) > alarm_limit and percentage_value_change < 0
+
+    except Exception as e:
+        print(f"Error fetching data for {symbol}: {e}")
+        company_name = "N/A"
+        opening_value = "N/A"
+        last_value = "N/A"
+        percentage_value_change = "N/A"
+        warning = False
 
     stock_data.append({
         "Symbol": symbol,
         "Company name": company_name,
         "Opening value": opening_value,
-        "last value": last_value,
+        "Last value": last_value,
         "Change %": percentage_value_change,
         "Warning": warning
     })
