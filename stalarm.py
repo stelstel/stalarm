@@ -145,14 +145,7 @@ for symbol in symbols:
     except Exception as e:
         msg_to_user = f"Error fetching data for {symbol}, Is this symbol correct? Check at https://finance.yahoo.com/lookup/"
         print(f"Error fetching data for {symbol}: {e}") #/////////////////////////////////////////////////////////////
-        company_name = "N/A"
-        opening_value_historic = "N/A"
-        lowest_price_historical = "N/A"
-        lowest_price_time_swedish = "N/A"
-        highest_price_historical = "N/A"
-        highest_price_time_swedish = "N/A"
-        decrease_limit_reached = "N/A"
-        raise_limit_reached_after_decrease_limit_reached = "N/A"
+        company_name = opening_value_historic = lowest_price_historical = lowest_price_time_swedish = highest_price_historical = highest_price_time_swedish = decrease_limit_reached = raise_limit_reached_after_decrease_limit_reached = "N/A"
 
     stock_data.append({
         "Symbol": symbol,
