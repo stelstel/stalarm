@@ -13,6 +13,7 @@ import pandas as pd
 import pytz
 
 # TODO add update_frequency to config.ini
+# TODO convert limits etc. to %
 
 # Clear console
 os.system('cls')
