@@ -1,8 +1,10 @@
 # stalarm.py
 # Author: Stefan Elmgren
 # Date: 2025-03-21 - 2025-03-24
-# Description: A simple stock alarm program that reads stock data from Yahoo Finance and compares the opening value with the last value. 
-#   If the percentage change exceeds a certain limit, the program displays a warning.
+# Description: A simple stock alarm program that checks if the stock price goes down beyond
+#   a specified decrease limit, then rises again after hitting that low. Alerts are triggered 
+#   based on this behavior using data fetched from Yahoo Finance.
+
 
 import yfinance as yahooFinance
 import os
