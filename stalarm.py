@@ -39,18 +39,17 @@ def read_config_ini():
     symbols = stock_symbols.split(",")  # Converts to a list
 
     # Read limits as floats
-    alarm_limit = float(config["settings"]["alarm_limit"])
     alarm_limit_decrease = float(config["settings"]["alarm_limit_decrease"])
     alarm_limit_raise_after_decrease = float(config["settings"]["alarm_limit_raise_after_decrease"])
 
     # Read start date as date
     start_date = config["settings"]["start-date"]
 
-    return symbols, alarm_limit, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date
+    return symbols, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date
 
 
 # Read configuration
-symbols, alarm_limit, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date = read_config_ini()
+symbols, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date = read_config_ini()
 
 # List to store stock data
 stock_data = []
@@ -66,19 +65,12 @@ for symbol in symbols:
 
         company_name = stock_data_dict.get("longName", "N/A")
 
-        # Get historical data for today
-        latest_data = stock_info.history(period="1d")
-        if latest_data.empty:
-            raise ValueError(f"No historical data available for {symbol}")
-        
         # Get historical data since start date
         historical_data = stock_info.history(start=start_date)
 
         if historical_data.empty:
             raise ValueError(f"No historical data available for {symbol} since {start_date}")
         
-        # opening_value_historic = historical_data["Open"].iloc[-1]  # Last available opening price
-
         if start_date in historical_data.index:
             # Define Swedish time zone
             swedish_timezone = pytz.timezone('Europe/Stockholm')
@@ -111,26 +103,9 @@ for symbol in symbols:
 
             # Convert the timestamp to Swedish time zone (CET/CEST)
             highest_price_time_swedish = lowest_price_time.astimezone(swedish_timezone)
-
-
-
-
-
-
-
         else:
             raise ValueError(f"No data available for {start_date}")
         
-        # latest_data = stock_info.history(period="1d")
-        # if latest_data.empty:
-        #     raise ValueError(f"No historical data available for {symbol}")
-
-        opening_value = latest_data["Open"].iloc[-1]  # Last available opening price
-        last_value = stock_info.fast_info["last_price"]
-        percentage_value_change = ((last_value - opening_value) / opening_value) * 100
-
-        warning = abs(percentage_value_change) > alarm_limit and percentage_value_change < 0
-
     except Exception as e:
         msg_to_user = f"Error fetching data for {symbol}, Is this symbol correct? Check at https://finance.yahoo.com/lookup/"
         print(f"Error fetching data for {symbol}: {e}") #/////////////////////////////////////////////////////////////
@@ -143,10 +118,6 @@ for symbol in symbols:
     stock_data.append({
         "Symbol": symbol,
         "Company name": company_name,
-        "Opening value": opening_value,
-        "Last value": last_value,
-        "Change %": percentage_value_change,
-        "Warning": warning
     })
 
 # Create a DataFrame with the collected data
