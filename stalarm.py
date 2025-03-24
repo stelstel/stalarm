@@ -1,6 +1,7 @@
 # stalarm.py
 # Author: Stefan Elmgren
 # Date: 2025-03-21 - 2025-03-24
+
 # Description: A simple stock alarm program that checks if the stock price goes down beyond
 #   a specified decrease limit, then rises again after hitting that low. Alerts are triggered 
 #   based on this behavior using data fetched from Yahoo Finance.
@@ -12,8 +13,9 @@ import configparser
 import pandas as pd
 import pytz
 
-# TODO add update_frequency to config.ini
+# TODO add update_frequency to config.ini etc.
 # TODO convert limits etc. to %
+# TODO convert start_date to date?
 
 # Clear console
 os.system('cls')
