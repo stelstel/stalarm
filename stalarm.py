@@ -88,6 +88,7 @@ for symbol in symbols:
 
         # Fetch stock data
         stock_data_dict = stock_info.get_info()
+
         if not stock_data_dict:
             raise ValueError(f"No data available for {symbol}")
 
@@ -100,9 +101,6 @@ for symbol in symbols:
             raise ValueError(f"No historical data available for {symbol} since {start_date}")
         
         if start_date in historical_data.index:
-            # Define Swedish time zone
-            # swedish_timezone = pytz.timezone('Europe/Stockholm')
-
             # Get the opening value for the specific date (start_date)
             opening_value_historic = float(historical_data.loc[start_date, "Open"])
 
