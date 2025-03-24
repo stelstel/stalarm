@@ -18,14 +18,17 @@ os.system('cls')
 
 def read_config_ini():
     """
-    Reads configuration data from a .ini file, extracting stock symbols and an alarm limit.
+    Reads configuration data from a `.ini` file, extracting stock symbols and alarm limits.
     
-    The function loads a configuration file (`config.ini`), retrieves stock symbols as a list, 
-    and converts the alarm limit into a float.
+    This function loads the configuration file (`config.ini`), retrieves stock symbols, 
+    alarm limits for decrease and raise conditions, and the start date for fetching stock 
+    data from Yahoo Finance. It returns these values for use in stock data analysis.
 
     Returns:
         symbols (list): A list of stock symbols (e.g., ["META", "AMZN"]).
-        alarm_limit (float): The alarm limit value, converted to float (e.g., 2.50).
+        alarm_limit_decrease (float): The alarm limit value for decrease, as a float (e.g., 2.50).
+        alarm_limit_raise_after_decrease (float): The alarm limit value for raise after decrease, as a float (e.g., 1.50).
+        start_date (str): The start date from which historical stock data is fetched, in string format (e.g., "2022-01-01").
     """
 
     # Load the config file
@@ -57,6 +60,7 @@ def convert_to_swedish_timezone(time):
     Returns:
         datetime: The converted datetime object in Swedish time zone.
     """
+
     # Define Swedish time zone
     swedish_timezone = pytz.timezone('Europe/Stockholm')
     
@@ -110,7 +114,7 @@ for symbol in symbols:
                 lowest_price_time = pytz.utc.localize(lowest_price_time)
 
             # Convert the timestamp to Swedish time zone (CET/CEST)
-            #lowest_price_time_swedish = convert_to_swedish_timezone(lowest_price_time)
+            lowest_price_time_swedish = convert_to_swedish_timezone(lowest_price_time)
 
             # Get the highest price in historical data
             highest_price_historical = float(historical_data["High"].max())
@@ -123,11 +127,17 @@ for symbol in symbols:
                 highest_price_time = pytz.utc.localize(highest_price_time)
 
             # Convert the timestamp to Swedish time zone (CET/CEST)
-            #highest_price_time_swedish = convert_to_swedish_timezone(highest_price_time)
+            highest_price_time_swedish = convert_to_swedish_timezone(highest_price_time)
 
-            if(lowest_price_historical < opening_value_historic and ( (opening_value_historic - lowest_price_historical) * 100 > alarm_limit_decrease) ):
-                print(f"Lowest price {lowest_price_historical} is lower than opening value {opening_value_historic}")
+            decrease_limit_reached = False
 
+            if (lowest_price_historical < opening_value_historic and ((opening_value_historic - lowest_price_historical) / opening_value_historic) * 100 > alarm_limit_decrease):
+                decrease_limit_reached = True
+
+            raise_limit_reached_after_decrease_limit_reached = False
+
+            if(highest_price_historical > lowest_price_historical and highest_price_time < lowest_price_time):
+                raise_limit_reached_after_decrease_limit_reached = True
         else:
             raise ValueError(f"No data available for {start_date}")
         
@@ -135,7 +145,13 @@ for symbol in symbols:
         msg_to_user = f"Error fetching data for {symbol}, Is this symbol correct? Check at https://finance.yahoo.com/lookup/"
         print(f"Error fetching data for {symbol}: {e}") #/////////////////////////////////////////////////////////////
         company_name = "N/A"
-        warning = False
+        opening_value_historic = "N/A"
+        lowest_price_historical = "N/A"
+        lowest_price_time_swedish = "N/A"
+        highest_price_historical = "N/A"
+        highest_price_time_swedish = "N/A"
+        decrease_limit_reached = "N/A"
+        raise_limit_reached_after_decrease_limit_reached = "N/A"
 
     stock_data.append({
         "Symbol": symbol,
@@ -144,7 +160,9 @@ for symbol in symbols:
         "Lowest price": lowest_price_historical,
         "Lowest price time": lowest_price_time_swedish,
         "Highest price": highest_price_historical,
-        "Highest price time": highest_price_time_swedish
+        "Highest price time": highest_price_time_swedish,
+        f"Decrease limit reached({alarm_limit_decrease})": decrease_limit_reached,
+        f"Raise limit reached after decrease limit reached({alarm_limit_raise_after_decrease})":  raise_limit_reached_after_decrease_limit_reached
     })
 
 # Create a DataFrame with the collected data
