@@ -3,8 +3,8 @@
 # Date: 2025-03-21 - 2025-03-25
 
 # Description: A simple stock alarm program that checks if the stock price goes down beyond
-#   a specified decrease limit, then rises again after hitting that low. Alerts are triggered 
-#   based on this behavior using data fetched from Yahoo Finance.
+#   a specified decrease limit, then rises again after hitting that low. 
+#   Alerts are triggered based on this behavior using data fetched from Yahoo Finance.
 
 import yfinance as yahooFinance
 import os
@@ -47,6 +47,7 @@ for symbol in symbols:
         # If start_date is missing, find the closest next available date
         if start_date not in historical_data.index:
             closest_dates = historical_data.index[historical_data.index > start_date]  # Find future dates
+
             if not closest_dates.empty:
                 start_date = closest_dates[0]  # Use the first available future date
             else:
@@ -65,7 +66,6 @@ for symbol in symbols:
             # Get the date and time of the lowest price (within the filtered range)
             lowest_price_time = historical_data_filtered["Low"].idxmin()
 
-
             # If the index (date) is not timezone-aware, localize it to UTC
             if lowest_price_time.tzinfo is None:
                 lowest_price_time = pytz.utc.localize(lowest_price_time)
@@ -73,8 +73,8 @@ for symbol in symbols:
             # Convert the timestamp to Swedish time zone (CET/CEST)
             lowest_price_time_swedish = convert_to_swedish_timezone(lowest_price_time)
 
-            # Filter historical data to only include prices from the start date onward
-            historical_data_filtered = historical_data.loc[start_date:]
+            # # Filter historical data to only include prices from the start date onward ///////////////////////////////////////////////////////////////
+            # historical_data_filtered = historical_data.loc[start_date:] ///////////////////////////////////////////////////////////////
 
             # Get the highest price within the filtered historical data
             highest_price_historical = float(historical_data_filtered["High"].max())
@@ -100,7 +100,8 @@ for symbol in symbols:
             raise_limit_reached_after_decrease_limit_reached = False
 
             # if(highest_price_historical > lowest_price_historical and highest_price_time < lowest_price_time):
-            if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and highest_price_time < lowest_price_time):
+            # if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and highest_price_time < lowest_price_time): /////////////////////////////////////////////////
+            if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and lowest_price_time > highest_price_time): # ??? latest_price time??? ///////////////////////////////////////////////////////////////
                 raise_limit_reached_after_decrease_limit_reached = True
         else:
             raise ValueError(f"No data available for {symbol} on {start_date}, latest available is {historical_data.index[-1]}")
