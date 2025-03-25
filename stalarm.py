@@ -12,10 +12,9 @@ import os
 import configparser
 import pandas as pd
 import pytz
+from datetime import datetime
 
 # TODO add update_frequency to config.ini etc.
-# TODO convert limits etc. to %
-# TODO convert start_date to date?
 # TODO Move functions to separate file
 
 # Clear console
@@ -50,8 +49,8 @@ def read_config_ini():
     alarm_limit_decrease = float(config["settings"]["alarm_limit_decrease"])
     alarm_limit_raise_after_decrease = float(config["settings"]["alarm_limit_raise_after_decrease"])
 
-    # Read start date as date
-    start_date = config["settings"]["start-date"]
+    # Read start date as a datetime object
+    start_date = datetime.strptime(config["settings"]["start-date"], "%Y-%m-%d")
 
     return symbols, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date
 
@@ -78,7 +77,6 @@ def convert_to_swedish_timezone(time):
     return time.astimezone(swedish_timezone)
 
 
-
 # Read configuration
 symbols, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date = read_config_ini()
 
@@ -103,15 +101,23 @@ for symbol in symbols:
         if historical_data.empty:
             raise ValueError(f"No historical data available for {symbol} since {start_date}")
         
+        # If start_date is missing, use the last available trading day
+        if start_date not in historical_data.index:
+            start_date = historical_data.index[-1]  # Use the latest available date
+
         if start_date in historical_data.index:
             # Get the opening value for the specific date (start_date)
             opening_value_historic = float(historical_data.loc[start_date, "Open"])
 
-            # Get the lowest price in historical data
-            lowest_price_historical = float(historical_data["Low"].min())
+            # Filter historical data to only include prices from the start date onward
+            historical_data_filtered = historical_data.loc[start_date:]
 
-            # Get the date and time of the lowest price
-            lowest_price_time = historical_data["Low"].idxmin()
+            # Get the lowest price within the filtered historical data
+            lowest_price_historical = float(historical_data_filtered["Low"].min())
+
+            # Get the date and time of the lowest price (within the filtered range)
+            lowest_price_time = historical_data_filtered["Low"].idxmin()
+
 
             # If the index (date) is not timezone-aware, localize it to UTC
             if lowest_price_time.tzinfo is None:
@@ -120,11 +126,14 @@ for symbol in symbols:
             # Convert the timestamp to Swedish time zone (CET/CEST)
             lowest_price_time_swedish = convert_to_swedish_timezone(lowest_price_time)
 
-            # Get the highest price in historical data
-            highest_price_historical = float(historical_data["High"].max())
+            # Filter historical data to only include prices from the start date onward
+            historical_data_filtered = historical_data.loc[start_date:]
 
-            # Get the date and time of the highest price
-            highest_price_time = historical_data["High"].idxmax()
+            # Get the highest price within the filtered historical data
+            highest_price_historical = float(historical_data_filtered["High"].max())
+
+            # Get the date and time of the highest price (within the filtered range)
+            highest_price_time = historical_data_filtered["High"].idxmax()
 
             # Get the latest available price
             latest_price = float(stock_info.fast_info["last_price"])
@@ -147,7 +156,7 @@ for symbol in symbols:
             if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and highest_price_time < lowest_price_time):
                 raise_limit_reached_after_decrease_limit_reached = True
         else:
-            raise ValueError(f"No data available for {start_date}")
+            raise ValueError(f"No data available for {symbol} on {start_date}, latest available is {historical_data.index[-1]}")
         
     except Exception as e:
         msg_to_user = f"Error fetching data for {symbol}, Is this symbol correct? Check at https://finance.yahoo.com/lookup/"
@@ -155,6 +164,7 @@ for symbol in symbols:
         company_name = opening_value_historic = lowest_price_historical = lowest_price_time_swedish = highest_price_historical = highest_price_time_swedish = decrease_limit_reached = raise_limit_reached_after_decrease_limit_reached = "N/A"
 
     stock_data.append({
+        "Actual start date": start_date,
         "Symbol": symbol,
         "Company name": company_name,
         "Opening value": opening_value_historic,
@@ -162,8 +172,8 @@ for symbol in symbols:
         "Lowest price time": lowest_price_time_swedish,
         "Highest price": highest_price_historical,
         "Highest price time": highest_price_time_swedish,
-        f"Decrease limit reached({alarm_limit_decrease})": decrease_limit_reached,
-        f"Raise limit reached after decrease limit reached({alarm_limit_raise_after_decrease})":  raise_limit_reached_after_decrease_limit_reached
+        f"Decrease limit reached({alarm_limit_decrease} %)": decrease_limit_reached,
+        f"Raise limit reached after decrease limit reached({alarm_limit_raise_after_decrease} %)":  raise_limit_reached_after_decrease_limit_reached
     })
 
 # Create a DataFrame with the collected data
