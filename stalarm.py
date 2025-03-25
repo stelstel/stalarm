@@ -1,81 +1,24 @@
 # stalarm.py
 # Author: Stefan Elmgren
-# Date: 2025-03-21 - 2025-03-24
+# Date: 2025-03-21 - 2025-03-25
 
 # Description: A simple stock alarm program that checks if the stock price goes down beyond
 #   a specified decrease limit, then rises again after hitting that low. Alerts are triggered 
 #   based on this behavior using data fetched from Yahoo Finance.
 
-
 import yfinance as yahooFinance
 import os
-import configparser
 import pandas as pd
 import pytz
-from datetime import datetime
+
+from functions import read_config_ini, convert_to_swedish_timezone
 
 # TODO add update_frequency to config.ini etc.
-# TODO Move functions to separate file
+# TODO Expand msg_to_user
+# TODO historic, historical
 
 # Clear console
 os.system('cls')
-
-
-def read_config_ini():
-    """
-    Reads configuration data from a `.ini` file, extracting stock symbols and alarm limits.
-    
-    This function loads the configuration file (`config.ini`), retrieves stock symbols, 
-    alarm limits for decrease and raise conditions, and the start date for fetching stock 
-    data from Yahoo Finance. It returns these values for use in stock data analysis.
-
-    Returns:
-        symbols (list): A list of stock symbols (e.g., ["META", "AMZN"]).
-        alarm_limit_decrease (float): The alarm limit value for decrease, as a float (e.g., 2.50).
-        alarm_limit_raise_after_decrease (float): The alarm limit value for raise after decrease, as a float (e.g., 1.50).
-        start_date (str): The start date from which historical stock data is fetched, in string format (e.g., "2022-01-01").
-    """
-
-    # Load the config file
-    config = configparser.ConfigParser()
-    config_file = "config.ini"
-    config.read(config_file)
-
-    # Read stock symbols
-    stock_symbols = config["stocks"]["symbols"].replace(" ", "")  # Removes spaces
-    symbols = stock_symbols.split(",")  # Converts to a list
-
-    # Read limits as floats
-    alarm_limit_decrease = float(config["settings"]["alarm_limit_decrease"])
-    alarm_limit_raise_after_decrease = float(config["settings"]["alarm_limit_raise_after_decrease"])
-
-    # Read start date as a datetime object
-    start_date = datetime.strptime(config["settings"]["start-date"], "%Y-%m-%d")
-
-    return symbols, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date
-
-
-def convert_to_swedish_timezone(time):
-    """
-    Converts a given timestamp to Swedish time zone (CET/CEST).
-    
-    Args:
-        time (datetime): The datetime object to be converted.
-        
-    Returns:
-        datetime: The converted datetime object in Swedish time zone.
-    """
-
-    # Define Swedish time zone
-    swedish_timezone = pytz.timezone('Europe/Stockholm')
-    
-    # If the index (date) is not timezone-aware, localize it to UTC
-    if time.tzinfo is None:
-        time = pytz.utc.localize(time)
-    
-    # Convert the timestamp to Swedish time zone (CET/CEST)
-    return time.astimezone(swedish_timezone)
-
 
 # Read configuration
 symbols, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date = read_config_ini()
@@ -101,9 +44,13 @@ for symbol in symbols:
         if historical_data.empty:
             raise ValueError(f"No historical data available for {symbol} since {start_date}")
         
-        # If start_date is missing, use the last available trading day
+        # If start_date is missing, find the closest next available date
         if start_date not in historical_data.index:
-            start_date = historical_data.index[-1]  # Use the latest available date
+            closest_dates = historical_data.index[historical_data.index > start_date]  # Find future dates
+            if not closest_dates.empty:
+                start_date = closest_dates[0]  # Use the first available future date
+            else:
+                start_date = historical_data.index[-1]  # Fallback to the latest available date
 
         if start_date in historical_data.index:
             # Get the opening value for the specific date (start_date)
@@ -161,7 +108,7 @@ for symbol in symbols:
     except Exception as e:
         msg_to_user = f"Error fetching data for {symbol}, Is this symbol correct? Check at https://finance.yahoo.com/lookup/"
         print(f"Error fetching data for {symbol}: {e}") #/////////////////////////////////////////////////////////////
-        company_name = opening_value_historic = lowest_price_historical = lowest_price_time_swedish = highest_price_historical = highest_price_time_swedish = decrease_limit_reached = raise_limit_reached_after_decrease_limit_reached = "N/A"
+        company_name = start_date, opening_value_historic = lowest_price_historical = lowest_price_time_swedish = highest_price_historical = highest_price_time_swedish = decrease_limit_reached = raise_limit_reached_after_decrease_limit_reached = "N/A"
 
     stock_data.append({
         "Actual start date": start_date,
