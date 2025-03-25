@@ -16,6 +16,7 @@ import pytz
 # TODO add update_frequency to config.ini etc.
 # TODO convert limits etc. to %
 # TODO convert start_date to date?
+# TODO Move functions to separate file
 
 # Clear console
 os.system('cls')
@@ -125,6 +126,9 @@ for symbol in symbols:
             # Get the date and time of the highest price
             highest_price_time = historical_data["High"].idxmax()
 
+            # Get the latest available price
+            latest_price = float(stock_info.fast_info["last_price"])
+
             # If the index (date) is not timezone-aware, localize it to UTC
             if highest_price_time.tzinfo is None:
                 highest_price_time = pytz.utc.localize(highest_price_time)
@@ -134,12 +138,13 @@ for symbol in symbols:
 
             decrease_limit_reached = False
 
-            if (lowest_price_historical < opening_value_historic and ((opening_value_historic - lowest_price_historical) / opening_value_historic) * 100 > alarm_limit_decrease):
+            if (lowest_price_historical < opening_value_historic and ( ( (opening_value_historic - lowest_price_historical) / 100) / opening_value_historic) * 100 > alarm_limit_decrease / 100):
                 decrease_limit_reached = True
 
             raise_limit_reached_after_decrease_limit_reached = False
 
-            if(highest_price_historical > lowest_price_historical and highest_price_time < lowest_price_time):
+            # if(highest_price_historical > lowest_price_historical and highest_price_time < lowest_price_time):
+            if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and highest_price_time < lowest_price_time):
                 raise_limit_reached_after_decrease_limit_reached = True
         else:
             raise ValueError(f"No data available for {start_date}")
