@@ -101,7 +101,7 @@ for symbol in symbols:
 
             # if(highest_price_historical > lowest_price_historical and highest_price_time < lowest_price_time):
             # if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and highest_price_time < lowest_price_time): /////////////////////////////////////////////////
-            if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and lowest_price_time > highest_price_time): # ??? latest_price time??? ///////////////////////////////////////////////////////////////
+            if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and lowest_price_time < highest_price_time and decrease_limit_reached): # ??? latest_price time??? ///////////////////////////////////////////////////////////////
                 raise_limit_reached_after_decrease_limit_reached = True
         else:
             raise ValueError(f"No data available for {symbol} on {start_date}, latest available is {historical_data.index[-1]}")
