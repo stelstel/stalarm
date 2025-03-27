@@ -73,9 +73,6 @@ for symbol in symbols:
             # Convert the timestamp to Swedish time zone (CET/CEST)
             lowest_price_time_swedish = convert_to_swedish_timezone(lowest_price_time)
 
-            # # Filter historical data to only include prices from the start date onward ///////////////////////////////////////////////////////////////
-            # historical_data_filtered = historical_data.loc[start_date:] ///////////////////////////////////////////////////////////////
-
             # Get the highest price within the filtered historical data
             highest_price_historical = float(historical_data_filtered["High"].max())
 
@@ -84,6 +81,9 @@ for symbol in symbols:
 
             # Get the latest available price
             latest_price = float(stock_info.fast_info["last_price"])
+
+            # Get the date and time of the latest price (within the filtered range)
+            latest_price_time = historical_data_filtered["Close"].idxmax()
 
             # If the index (date) is not timezone-aware, localize it to UTC
             if highest_price_time.tzinfo is None:
@@ -99,9 +99,7 @@ for symbol in symbols:
 
             raise_limit_reached_after_decrease_limit_reached = False
 
-            # if(highest_price_historical > lowest_price_historical and highest_price_time < lowest_price_time):
-            # if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and highest_price_time < lowest_price_time): /////////////////////////////////////////////////
-            if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and lowest_price_time < highest_price_time and decrease_limit_reached): # ??? latest_price time??? ///////////////////////////////////////////////////////////////
+            if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and lowest_price_time < latest_price_time and decrease_limit_reached):    
                 raise_limit_reached_after_decrease_limit_reached = True
         else:
             raise ValueError(f"No data available for {symbol} on {start_date}, latest available is {historical_data.index[-1]}")
@@ -120,6 +118,8 @@ for symbol in symbols:
         "Lowest price time": lowest_price_time_swedish,
         "Highest price": highest_price_historical,
         "Highest price time": highest_price_time_swedish,
+        "Latest price": latest_price,
+        "Latest price time": latest_price_time,
         f"Decrease limit reached({alarm_limit_decrease} %)": decrease_limit_reached,
         f"Raise limit reached after decrease limit reached({alarm_limit_raise_after_decrease} %)":  raise_limit_reached_after_decrease_limit_reached
     })
