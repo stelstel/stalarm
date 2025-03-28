@@ -23,8 +23,9 @@ def read_config_ini():
 
     # Load the config file
     config = configparser.ConfigParser()
+    config_file_path = "app"
     config_file = "config.ini"
-    config.read(config_file)
+    config.read(f"{config_file_path}/{config_file}")
 
     # Read stock symbols
     stock_symbols = config["stocks"]["symbols"].replace(" ", "")  # Removes spaces
