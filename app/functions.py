@@ -23,7 +23,7 @@ def read_config_ini():
 
     # Load the config file
     config = configparser.ConfigParser()
-    config_file_path = "app"
+    config_file_path = "app/config"
     config_file = "config.ini"
     config.read(f"{config_file_path}/{config_file}")
 
