@@ -35,7 +35,7 @@ def read_config_ini():
     alarm_limit_raise_after_decrease = float(config["settings"]["alarm_limit_raise_after_decrease"])
 
     # Read start date as a datetime object
-    start_date = datetime.strptime(config["settings"]["start-date"], "%Y-%m-%d")
+    start_date = datetime.strptime(config["settings"]["start_date"], "%Y-%m-%d")
 
     # Ensure that start_date is in the same timezone as historical_data.index
     sweden_tz = pytz.timezone("Europe/Stockholm")
