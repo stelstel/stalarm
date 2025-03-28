@@ -99,7 +99,9 @@ for symbol in symbols:
 
             raise_limit_reached_after_decrease_limit_reached = False
 
-            if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and lowest_price_time < latest_price_time and decrease_limit_reached):    
+            # if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and lowest_price_time < latest_price_time and decrease_limit_reached):
+            if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and decrease_limit_reached):    
+   
                 raise_limit_reached_after_decrease_limit_reached = True
         else:
             raise ValueError(f"No data available for {symbol} on {start_date}, latest available is {historical_data.index[-1]}")
