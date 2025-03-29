@@ -4,12 +4,13 @@
     }
 }
 
-.td-dec__limit_reached,
-.td-inc__limit_reached_after_decrease_limit_reached{
+.td-dec__lim__reached,
+.td-inc__lim__reached_after_decrease_lim__reached{
     font-weight: bold;
 }
 
 .table.table-striped thead tr th{
     background-color: blue;
     color: white; /* Optional: Make text color white to be visible on black background */
+    vertical-align: top;
 }
