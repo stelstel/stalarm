@@ -11,6 +11,6 @@
 
 .table.table-striped thead tr th{
     background-color: blue;
-    color: white; /* Optional: Make text color white to be visible on black background */
+    color: white;
     vertical-align: top;
 }
