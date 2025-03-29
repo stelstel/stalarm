@@ -23,7 +23,7 @@ from functions import read_config_ini, convert_to_swedish_timezone, custom_sort
 os.system('cls')
 
 # Read configuration
-symbols, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date = read_config_ini()
+symbols, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date, price_decimals = read_config_ini()
 
 # List to store stock data
 stock_data = []
@@ -117,12 +117,12 @@ for symbol in symbols:
         "Company name": company_name,
         "Symbol": symbol,
         "Actual start date": start_date,
-        "Opening value": opening_value_historic,
-        "Lowest price": lowest_price_historical,
+        "Opening value": round(opening_value_historic, price_decimals),
+        "Lowest price": round(lowest_price_historical, price_decimals),
         "Lowest price time": lowest_price_time_swedish,
-        "Highest price": highest_price_historical,
+        "Highest price": round(highest_price_historical, price_decimals),
         "Highest price time": highest_price_time_swedish,
-        "Latest price": latest_price,
+        "Latest price": round(latest_price, price_decimals),
         "Latest price time": latest_price_time,
         "Dec. limit reached": decrease_limit_reached,
         "Dec. limit": f"{alarm_limit_decrease} %",

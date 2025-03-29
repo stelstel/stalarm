@@ -41,7 +41,9 @@ def read_config_ini():
     sweden_tz = pytz.timezone("Europe/Stockholm")
     start_date = sweden_tz.localize(start_date) if start_date.tzinfo is None else start_date
 
-    return symbols, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date
+    price_decimals = int(config["settings"]["price_decimals"])
+
+    return symbols, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date, price_decimals
 
 
 def convert_to_swedish_timezone(time):
