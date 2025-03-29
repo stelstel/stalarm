@@ -56,6 +56,9 @@ for symbol in symbols:
                 start_date = historical_data.index[-1]  # Fallback to the latest available date
 
         if start_date in historical_data.index:
+            # Convert the timestamp to Swedish time zone (CET/CEST)
+            start_time_swedish = convert_to_swedish_timezone(start_date)
+
             # Get the opening value for the specific date (start_date)
             opening_value_historic = float(historical_data.loc[start_date, "Open"])
 
@@ -87,6 +90,8 @@ for symbol in symbols:
             # Get the date and time of the latest price (within the filtered range)
             latest_price_time = historical_data_filtered["Close"].idxmax()
 
+            latest_price_time_swedish = convert_to_swedish_timezone(latest_price_time)
+
             # If the index (date) is not timezone-aware, localize it to UTC
             if highest_price_time.tzinfo is None:
                 highest_price_time = pytz.utc.localize(highest_price_time)
@@ -103,7 +108,6 @@ for symbol in symbols:
 
             # if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and lowest_price_time < latest_price_time and decrease_limit_reached):
             if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and decrease_limit_reached):    
-   
                 raise_limit_reached_after_decrease_limit_reached = True
         else:
             raise ValueError(f"No data available for {symbol} on {start_date}, latest available is {historical_data.index[-1]}")
@@ -116,14 +120,14 @@ for symbol in symbols:
     stock_data.append({
         "Company name": company_name,
         "Symbol": symbol,
-        "Actual start date": start_date,
+        "Actual start date": start_time_swedish,
         "Opening value": round(opening_value_historic, price_decimals),
         "Lowest price": round(lowest_price_historical, price_decimals),
         "Lowest price time": lowest_price_time_swedish,
         "Highest price": round(highest_price_historical, price_decimals),
         "Highest price time": highest_price_time_swedish,
         "Latest price": round(latest_price, price_decimals),
-        "Latest price time": latest_price_time,
+        "Latest price time": latest_price_time_swedish,
         "Dec. limit reached": decrease_limit_reached,
         "Dec. limit": f"{alarm_limit_decrease} %",
         "Inc. limit reached after decrease limit reached":  raise_limit_reached_after_decrease_limit_reached,
