@@ -64,3 +64,34 @@ def convert_to_swedish_timezone(time):
     
     # Convert the timestamp to Swedish time zone (CET/CEST)
     return time.astimezone(swedish_timezone)
+
+
+def custom_sort(df):
+    """
+    Sort the DataFrame based on specific conditions:
+    1. Rows where raise_limit_reached_after_decrease_limit_reached = True and decrease_limit_reached = True.
+    2. Rows where raise_limit_reached_after_decrease_limit_reached = False and decrease_limit_reached = True.
+    3. Rows where decrease_limit_reached = False.
+
+    Args:
+    df (pd.DataFrame): The DataFrame to be sorted.
+
+    Returns:
+    pd.DataFrame: The sorted DataFrame.
+    """
+    # Create a custom sort key based on the conditions:
+    df['custom_sort'] = (
+        (df['Inc. limit reached after decrease limit reached'] == True) &
+        (df['Dec. limit reached'] == True)
+    ).astype(int) * 2 + (
+        (df['Inc. limit reached after decrease limit reached'] == False) &
+        (df['Dec. limit reached'] == True)
+    ).astype(int) * 1
+
+    # Sort the DataFrame based on the custom_sort column
+    df_sorted = df.sort_values(by='custom_sort', ascending=False)
+
+    # Drop the custom_sort column as it's no longer needed
+    df_sorted = df_sorted.drop(columns='custom_sort')
+
+    return df_sorted

@@ -11,11 +11,13 @@ import os
 import pandas as pd
 import pytz
 
-from functions import read_config_ini, convert_to_swedish_timezone
+from functions import read_config_ini, convert_to_swedish_timezone, custom_sort
 
 # TODO add update_frequency to config.ini etc.
 # TODO Expand msg_to_user
 # TODO historic, historical
+# TODO Change price decimals to 2
+# TODO raise -> increase
 
 # Clear console
 os.system('cls')
@@ -131,5 +133,8 @@ for symbol in symbols:
 # Create a DataFrame with the collected data
 df_stock_data = pd.DataFrame(stock_data)
 
+# Sorting the DataFrame based on the custom sort function
+df_stock_data = custom_sort(df_stock_data)
+
 # Display the DataFrame
-print(df_stock_data.to_string(index=False))
+print(df_stock_data.to_string(index=False)) # ////////////////////////////////////////////////////////
