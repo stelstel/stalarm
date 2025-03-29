@@ -3,7 +3,8 @@
         max-width: 1920px;
     }
 }
-dataframe.table {
-    border-collapse: collapse;
-    width: 100%;
+
+.td-dec__limit_reached,
+.td-inc__limit_reached_after_decrease_limit_reached{
+    font-weight: bold;
 }
