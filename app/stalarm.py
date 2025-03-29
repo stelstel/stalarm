@@ -123,8 +123,8 @@ for symbol in symbols:
         "Latest price": latest_price,
         "Latest price time": latest_price_time,
         "Dec. limit reached": decrease_limit_reached,
-        "Dec. limit": alarm_limit_decrease,
-        "Inc. limit reached after decrease limit reached":  f"{raise_limit_reached_after_decrease_limit_reached} %",
+        "Dec. limit": f"{alarm_limit_decrease} %",
+        "Inc. limit reached after decrease limit reached":  raise_limit_reached_after_decrease_limit_reached,
         "Inc. limit": f"{alarm_limit_raise_after_decrease} %"
     })
 
