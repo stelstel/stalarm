@@ -112,9 +112,9 @@ for symbol in symbols:
         company_name = start_date, opening_value_historic = lowest_price_historical = lowest_price_time_swedish = highest_price_historical = highest_price_time_swedish = decrease_limit_reached = raise_limit_reached_after_decrease_limit_reached = "N/A"
 
     stock_data.append({
-        "Actual start date": start_date,
-        "Symbol": symbol,
         "Company name": company_name,
+        "Symbol": symbol,
+        "Actual start date": start_date,
         "Opening value": opening_value_historic,
         "Lowest price": lowest_price_historical,
         "Lowest price time": lowest_price_time_swedish,
