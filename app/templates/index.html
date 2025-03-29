@@ -27,7 +27,7 @@
                 {% for row in df %}
                     <tr>
                         {% for key, value in row.items() %}
-                            <td class="td-{{ key|lower | replace(' ', '_') }}">{{ value }}</td>
+                        <td class="td-{{ key|lower | replace(' ', '_') | replace('.', '_') }}">{{ value }}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
