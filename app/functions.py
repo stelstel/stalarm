@@ -6,7 +6,6 @@ import configparser
 from datetime import datetime
 import pytz
 
-
 def read_config_ini():
     """
     Loads the stock monitoring configuration from 'config.ini'.
