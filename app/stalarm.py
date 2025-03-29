@@ -15,9 +15,8 @@ from functions import read_config_ini, convert_to_swedish_timezone, custom_sort
 
 # TODO add update_frequency to config.ini etc.
 # TODO Expand msg_to_user
-# TODO historic, historical
-# TODO Change price decimals to 2
-# TODO raise -> increase
+# TODO historic, historical ?
+# TODO raise -> increase ?
 
 # Clear console
 os.system('cls')
