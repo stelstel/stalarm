@@ -122,8 +122,10 @@ for symbol in symbols:
         "Highest price time": highest_price_time_swedish,
         "Latest price": latest_price,
         "Latest price time": latest_price_time,
-        f"Decrease limit reached({alarm_limit_decrease} %)": decrease_limit_reached,
-        f"Raise limit reached after decrease limit reached({alarm_limit_raise_after_decrease} %)":  raise_limit_reached_after_decrease_limit_reached
+        "Dec. limit reached": decrease_limit_reached,
+        "Dec. limit": alarm_limit_decrease,
+        "Inc. limit reached after decrease limit reached":  f"{raise_limit_reached_after_decrease_limit_reached} %",
+        "Inc. limit": f"{alarm_limit_raise_after_decrease} %"
     })
 
 # Create a DataFrame with the collected data
