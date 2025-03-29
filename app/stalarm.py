@@ -13,8 +13,9 @@ import pytz
 
 from functions import read_config_ini, convert_to_swedish_timezone, custom_sort
 
-# 2025 -> 25
-# TODO add update_frequency to config.ini etc.
+# TODO Why always midnight
+# TODO 2025 -> 25
+# TODO add update_frequency to
 # TODO Expand msg_to_user
 # TODO historic, historical ?
 # TODO raise -> increase ?
@@ -130,7 +131,7 @@ for symbol in symbols:
         "Latest price time": latest_price_time_swedish,
         "Dec. lim. reached": decrease_limit_reached,
         "Dec. lim.": f"{alarm_limit_decrease} %",
-        "Inc. lim. reached after decrease lim. reached":  raise_limit_reached_after_decrease_limit_reached,
+        "Inc. lim. reached after dec. lim. reached":  raise_limit_reached_after_decrease_limit_reached,
         "Inc. lim.": f"{alarm_limit_raise_after_decrease} %"
     })
 

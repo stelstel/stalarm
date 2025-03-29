@@ -86,10 +86,10 @@ def custom_sort(df):
     """
     # Create a custom sort key based on the conditions:
     df['custom_sort'] = (
-        (df['Inc. lim. reached after decrease lim. reached'] == True) &
+        (df['Inc. lim. reached after dec. lim. reached'] == True) &
         (df['Dec. lim. reached'] == True)
     ).astype(int) * 2 + (
-        (df['Inc. lim. reached after decrease lim. reached'] == False) &
+        (df['Inc. lim. reached after dec. lim. reached'] == False) &
         (df['Dec. lim. reached'] == True)
     ).astype(int) * 1
 
