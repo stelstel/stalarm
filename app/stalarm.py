@@ -13,6 +13,7 @@ import pytz
 
 from functions import read_config_ini, convert_to_swedish_timezone, custom_sort
 
+# 2025 -> 25
 # TODO add update_frequency to config.ini etc.
 # TODO Expand msg_to_user
 # TODO historic, historical ?

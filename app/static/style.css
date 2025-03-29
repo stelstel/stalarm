@@ -1,6 +1,7 @@
 @media(min-width: 1400px){
     .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
-        max-width: 1920px;
+        /* max-width: 1920px; */
+        max-width: 90%;
     }
 }
 
@@ -9,8 +10,36 @@
     font-weight: bold;
 }
 
+.table.table-striped{
+    border-spacing: 2px;
+    border-collapse: separate;
+}
+
 .table.table-striped thead tr th{
     background-color: blue;
     color: white;
     vertical-align: top;
+}
+
+.table.table-striped.stock_data_table tr th,
+.table.table-striped.stock_data_table tr td{
+    border-radius: 5px;
+    padding: 3px;
+    border-style: none;
+    padding: 0px 8px 0px 8px;
+}
+
+/* Make the column "Inc. lim. reached after decrease lim. reached" narrower */
+.table th:nth-child(1), .table td:nth-child(13) {
+    width: 7%;
+}
+
+/* Target even rows */
+.table.table-striped.stock_data_table tr:nth-child(even) td {
+    background-color: rgb(235, 233, 233);
+}
+
+/* Target odd rows */
+.table.table-striped.stock_data_table tr:nth-child(odd) td {
+    background-color: rgb(205, 226, 233);
 }
