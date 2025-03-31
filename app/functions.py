@@ -16,7 +16,7 @@ def read_config_ini():
         tuple: A tuple containing:
             - symbols (list): A list of stock symbols.
             - alarm_limit_decrease (float): Percentage decrease that triggers an alarm.
-            - alarm_limit_raise_after_decrease (float): Percentage increase after a decrease that triggers an alarm.
+            - alarm_limit_increase_after_decrease (float): Percentage increase after a decrease that triggers an alarm.
             - start_date (datetime): The start date for monitoring stock data.
     """
 
@@ -32,7 +32,7 @@ def read_config_ini():
 
     # Read limits as floats
     alarm_limit_decrease = float(config["settings"]["alarm_limit_decrease"])
-    alarm_limit_raise_after_decrease = float(config["settings"]["alarm_limit_raise_after_decrease"])
+    alarm_limit_increase_after_decrease = float(config["settings"]["alarm_limit_increase_after_decrease"])
 
     # Read start date as a datetime object
     start_date = datetime.strptime(config["settings"]["start_date"], "%Y-%m-%d")
@@ -43,7 +43,7 @@ def read_config_ini():
 
     price_decimals = int(config["settings"]["max_price_decimals"])
 
-    return symbols, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date, price_decimals
+    return symbols, alarm_limit_decrease, alarm_limit_increase_after_decrease, start_date, price_decimals
 
 
 def convert_to_swedish_timezone(time):
@@ -74,8 +74,8 @@ def convert_to_swedish_timezone(time):
 def custom_sort(df):
     """
     Sort the DataFrame based on specific conditions:
-    1. Rows where raise_limit_reached_after_decrease_limit_reached = True and decrease_limit_reached = True.
-    2. Rows where raise_limit_reached_after_decrease_limit_reached = False and decrease_limit_reached = True.
+    1. Rows where increase_limit_reached_after_decrease_limit_reached = True and decrease_limit_reached = True.
+    2. Rows where increase_limit_reached_after_decrease_limit_reached = False and decrease_limit_reached = True.
     3. Rows where decrease_limit_reached = False.
 
     Args:

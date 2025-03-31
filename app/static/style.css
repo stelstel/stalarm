@@ -45,8 +45,7 @@
 }
 
 #stockTable.table.table-striped.stock_data_table tr.table-danger-custom td {
-    background-color: #b22222; /* Firebrick red */
-    color: white;
+    background-color: #ff0000;
     font-weight: bold;
 }
 

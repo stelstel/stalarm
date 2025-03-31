@@ -13,16 +13,14 @@ import pytz
 
 from functions import read_config_ini, convert_to_swedish_timezone, custom_sort
 
-# TODO add update_frequency to
+# TODO add update_frequency
 # TODO Expand msg_to_user
-# TODO historic, historical ?
-# TODO raise -> increase ?
 
 # Clear console
 os.system('cls')
 
 # Read configuration
-symbols, alarm_limit_decrease, alarm_limit_raise_after_decrease, start_date, price_decimals = read_config_ini()
+symbols, alarm_limit_decrease, alarm_limit_increase_after_decrease, start_date, price_decimals = read_config_ini()
 
 # List to store stock data
 stock_data = []
@@ -59,7 +57,7 @@ for symbol in symbols:
             start_time_swedish = convert_to_swedish_timezone(start_date)
 
             # Get the opening value for the specific date (start_date)
-            opening_value_historic = float(historical_data.loc[start_date, "Open"])
+            opening_price_historical = float(historical_data.loc[start_date, "Open"])
 
             # Filter historical data to only include prices from the start date onward
             historical_data_filtered = historical_data.loc[start_date:]
@@ -100,27 +98,26 @@ for symbol in symbols:
 
             decrease_limit_reached = False
 
-            if (lowest_price_historical < opening_value_historic and ( ( (opening_value_historic - lowest_price_historical) / 100) / opening_value_historic) * 100 > alarm_limit_decrease / 100):
+            if (lowest_price_historical < opening_price_historical and ( ( (opening_price_historical - lowest_price_historical) / 100) / opening_price_historical) * 100 > alarm_limit_decrease / 100):
                 decrease_limit_reached = True
 
-            raise_limit_reached_after_decrease_limit_reached = False
+            increase_limit_reached_after_decrease_limit_reached = False
 
-            # if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and lowest_price_time < latest_price_time and decrease_limit_reached):
-            if(latest_price > lowest_price_historical * (1 + alarm_limit_raise_after_decrease / 100) and decrease_limit_reached):    
-                raise_limit_reached_after_decrease_limit_reached = True
+            # if(latest_price > lowest_price_historical * (1 + alarm_limit_increase_after_decrease / 100) and lowest_price_time < latest_price_time and decrease_limit_reached):
+            if(latest_price > lowest_price_historical * (1 + alarm_limit_increase_after_decrease / 100) and decrease_limit_reached):    
+                increase_limit_reached_after_decrease_limit_reached = True
         else:
             raise ValueError(f"No data available for {symbol} on {start_date}, latest available is {historical_data.index[-1]}")
         
     except Exception as e:
         msg_to_user = f"Error fetching data for {symbol}, Is this symbol correct? Check at https://finance.yahoo.com/lookup/"
-        print(f"Error fetching data for {symbol}: {e}") #/////////////////////////////////////////////////////////////
-        company_name = start_date, opening_value_historic = lowest_price_historical = lowest_price_time_swedish = highest_price_historical = highest_price_time_swedish = decrease_limit_reached = raise_limit_reached_after_decrease_limit_reached = "N/A"
+        company_name = start_date, opening_price_historical = lowest_price_historical = lowest_price_time_swedish = highest_price_historical = highest_price_time_swedish = decrease_limit_reached = increase_limit_reached_after_decrease_limit_reached = "N/A"
 
     stock_data.append({
         "Company name": company_name,
         "Symbol": symbol,
         "Actual start date": start_time_swedish,
-        "Opening value": round(opening_value_historic, price_decimals),
+        "Opening price": round(opening_price_historical, price_decimals),
         "Lowest price": round(lowest_price_historical, price_decimals),
         "Lowest price time": lowest_price_time_swedish,
         "Highest price": round(highest_price_historical, price_decimals),
@@ -129,8 +126,8 @@ for symbol in symbols:
         "Latest price time": latest_price_time_swedish,
         "Dec. lim. reached": decrease_limit_reached,
         "Dec. lim.": f"{alarm_limit_decrease} %",
-        "Inc. lim. reached after dec. lim. reached":  raise_limit_reached_after_decrease_limit_reached,
-        "Inc. lim.": f"{alarm_limit_raise_after_decrease} %"
+        "Inc. lim. reached after dec. lim. reached":  increase_limit_reached_after_decrease_limit_reached,
+        "Inc. lim.": f"{alarm_limit_increase_after_decrease} %"
     })
 
 # Create a DataFrame with the collected data

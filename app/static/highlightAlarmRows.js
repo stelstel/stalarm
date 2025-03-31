@@ -12,8 +12,8 @@ $(document).ready(function() {
         }
     });
 
-    console.log("highlightAlarmRows.js is loaded!");
-    console.log("jQuery version:", $.fn.jquery);  // Check if jQuery is loaded
+    console.log("highlightAlarmRows.js is loaded!"); /////////////////////////////////////
+    console.log("jQuery version:", $.fn.jquery);  // Check if jQuery is loaded ///////////////////////////
 });
 
 
