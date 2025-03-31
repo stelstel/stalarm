@@ -13,8 +13,6 @@ import pytz
 
 from functions import read_config_ini, convert_to_swedish_timezone, custom_sort
 
-# TODO Why always midnight
-# TODO 2025 -> 25. functions row 70
 # TODO add update_frequency to
 # TODO Expand msg_to_user
 # TODO historic, historical ?
