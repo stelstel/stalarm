@@ -43,3 +43,10 @@
 .table.table-striped.stock_data_table tr:nth-child(odd) td {
     background-color: rgb(205, 226, 233);
 }
+
+#stockTable.table.table-striped.stock_data_table tr.table-danger-custom td {
+    background-color: #b22222; /* Firebrick red */
+    color: white;
+    font-weight: bold;
+}
+

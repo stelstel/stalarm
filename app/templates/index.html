@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stalarm</title>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" 
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 
+    <!-- Custom Style -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
     <div class="container mt-4">
         <h1>Stalarm</h1>
         <h2>Stock Data</h2>
-        <table class="table table-striped stock_data_table">
+        <table id="stockTable" class="table table-striped stock_data_table">
             <thead>
                 <tr>
                     {% for column in columns %}
@@ -27,15 +33,19 @@
                 {% for row in df %}
                     <tr>
                         {% for key, value in row.items() %}
-                        <td class="td-{{ key|lower | replace(' ', '_') | replace('.', '_') }}">{{ value }}</td>
+                            <td class="td-{{ key|lower | replace(' ', '_') | replace('.', '_') }}">{{ value }}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    
     <!-- Bootstrap JS (Optional, for interactive components) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='highlightAlarmRows.js') }}"></script>
 </body>
-</html>
 
+</html>
