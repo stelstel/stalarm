@@ -1,6 +1,6 @@
 # stalarm.py
 # Author: Stefan Elmgren
-# Date: 2025-03-21 - 2025-03-25
+# Date: 2025-03-21 - 2025-03-31
 
 # Description: A simple stock alarm program that checks if the stock price goes down beyond
 #   a specified decrease limit, then rises again after hitting that low. 
@@ -14,7 +14,7 @@ import pytz
 from functions import read_config_ini, convert_to_swedish_timezone, custom_sort
 
 # TODO Why always midnight
-# TODO 2025 -> 25
+# TODO 2025 -> 25. functions row 70
 # TODO add update_frequency to
 # TODO Expand msg_to_user
 # TODO historic, historical ?
@@ -89,8 +89,8 @@ for symbol in symbols:
             latest_price = float(stock_info.fast_info["last_price"])
 
             # Get the date and time of the latest price (within the filtered range)
-            latest_price_time = historical_data_filtered["Close"].idxmax()
-
+            latest_price_time = pd.Timestamp.now()
+            
             latest_price_time_swedish = convert_to_swedish_timezone(latest_price_time)
 
             # If the index (date) is not timezone-aware, localize it to UTC
