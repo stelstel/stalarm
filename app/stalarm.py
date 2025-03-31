@@ -11,7 +11,7 @@ import os
 import pandas as pd
 import pytz
 
-from functions import read_config_ini, convert_to_swedish_timezone, custom_sort
+from functions import read_config_ini, custom_sort, convert_to_swedish_timezone
 
 # TODO add update_frequency
 # TODO Expand msg_to_user
@@ -81,20 +81,21 @@ for symbol in symbols:
             # Get the date and time of the highest price (within the filtered range)
             highest_price_time = historical_data_filtered["High"].idxmax()
 
-            # Get the latest available price
-            latest_price = float(stock_info.fast_info["last_price"])
-
-            # Get the date and time of the latest price (within the filtered range)
-            latest_price_time = pd.Timestamp.now()
-            
-            latest_price_time_swedish = convert_to_swedish_timezone(latest_price_time)
-
             # If the index (date) is not timezone-aware, localize it to UTC
             if highest_price_time.tzinfo is None:
                 highest_price_time = pytz.utc.localize(highest_price_time)
 
             # Convert the timestamp to Swedish time zone (CET/CEST)
             highest_price_time_swedish = convert_to_swedish_timezone(highest_price_time)
+
+            # Get the latest available price
+            latest_price = float(stock_info.fast_info["last_price"])
+
+            # Get the date and time of the latest price (current time in Swedish timezone)
+            latest_price_time = pd.Timestamp.now(pytz.timezone('Europe/Stockholm'))
+
+            # Convert the latest price time to Swedish time
+            latest_price_time_swedish = convert_to_swedish_timezone(latest_price_time)
 
             decrease_limit_reached = False
 
@@ -108,7 +109,7 @@ for symbol in symbols:
                 increase_limit_reached_after_decrease_limit_reached = True
         else:
             raise ValueError(f"No data available for {symbol} on {start_date}, latest available is {historical_data.index[-1]}")
-        
+
     except Exception as e:
         msg_to_user = f"Error fetching data for {symbol}, Is this symbol correct? Check at https://finance.yahoo.com/lookup/"
         company_name = start_date, opening_price_historical = lowest_price_historical = lowest_price_time_swedish = highest_price_historical = highest_price_time_swedish = decrease_limit_reached = increase_limit_reached_after_decrease_limit_reached = "N/A"

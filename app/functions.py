@@ -46,29 +46,20 @@ def read_config_ini():
     return symbols, alarm_limit_decrease, alarm_limit_increase_after_decrease, start_date, price_decimals
 
 
-def convert_to_swedish_timezone(time):
-    """
-    Converts a given timestamp to Swedish time zone (CET/CEST) and removes timezone info.
-    
-    Args:
-        time (datetime): The datetime object to be converted.
-        
-    Returns:
-        str: The formatted datetime string in Swedish time zone without seconds.
-    """
+def convert_to_swedish_timezone(timestamp):
+    # Ensure the timestamp is timezone-aware (convert to UTC first if it's naive)
+    stockholm_tz = pytz.timezone('Europe/Stockholm')
 
-    # Define Swedish time zone
-    swedish_timezone = pytz.timezone("Europe/Stockholm")
+    if timestamp.tzinfo is None:
+        # If timestamp is naive, localize it to UTC first
+        timestamp = pytz.utc.localize(timestamp)
 
-    # If the input datetime is not timezone-aware, assume it's in UTC
-    if time.tzinfo is None:
-        time = pytz.utc.localize(time)
+    # Now convert the timestamp to Swedish time zone (CET/CEST)
+    time_swedish = timestamp.astimezone(stockholm_tz)
 
-    # Convert the timestamp to Swedish time zone (CET/CEST)
-    time_swedish = time.astimezone(swedish_timezone)
-
-    # Format the datetime as 'YY-MM-DD HH:MM' (without seconds)
+    # Return the formatted date and time as 'YY-MM-DD, HH:MM' (without seconds)
     return time_swedish.strftime("%y-%m-%d, %H:%M")
+
 
 
 def custom_sort(df):
