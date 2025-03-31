@@ -15,6 +15,8 @@ from functions import read_config_ini, custom_sort, convert_to_swedish_timezone
 
 # TODO add update_frequency
 # TODO Expand msg_to_user
+# TODO Every stock should have their own inc_limit, dec_limit, and start_date ???
+# TODO Remove every second row different color
 
 # Clear console
 os.system('cls')

@@ -53,4 +53,11 @@
     font-weight: bold;
 }
 
+#stockTable.table.table-striped.stock_data_table tbody tr:hover td{
+    background-color: #000000;
+    cursor: pointer;  /* Change the cursor to a pointer */
+    color: rgb(255, 255, 255);
+}
+
+
 
