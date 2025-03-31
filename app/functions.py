@@ -68,7 +68,7 @@ def convert_to_swedish_timezone(time):
     time_swedish = time.astimezone(swedish_timezone)
 
     # Format the datetime as 'YY-MM-DD HH:MM' (without seconds)
-    return time_swedish.strftime("%y-%m-%d %H:%M")
+    return time_swedish.strftime("%y-%m-%d, %H:%M")
 
 
 def custom_sort(df):
