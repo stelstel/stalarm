@@ -36,16 +36,21 @@
 
 /* Target even rows */
 .table.table-striped.stock_data_table tr:nth-child(even) td {
-    background-color: rgb(235, 233, 233);
+    background-color: rgb(150, 200, 150);
 }
 
 /* Target odd rows */
 .table.table-striped.stock_data_table tr:nth-child(odd) td {
-    background-color: rgb(205, 226, 233);
+    background-color: rgb(175, 200, 175);
+}
+
+#stockTable.table.table-striped.stock_data_table tr.table-warning-custom td {
+    background-color: lightyellow
 }
 
 #stockTable.table.table-striped.stock_data_table tr.table-danger-custom td {
     background-color: #ff0000;
     font-weight: bold;
 }
+
 
