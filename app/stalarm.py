@@ -119,7 +119,7 @@ for symbol in symbols:
         # company_name = start_date, opening_price_historical = lowest_price_historical = lowest_price_time_swedish = highest_price_historical = highest_price_time_swedish = decrease_limit_reached = increase_limit_reached_after_decrease_limit_reached = "N/A"
         company_name = "N/A"
         start_date = "N/A"
-        opening_price_historical = "N/A"
+        opening_price_historical = 0
         lowest_price_historical = "N/A"
         lowest_price_time_swedish = "N/A"
         highest_price_historical = "N/A"
@@ -132,7 +132,8 @@ for symbol in symbols:
         "Company name": company_name,
         "Symbol": symbol,
         "Actual start date": start_time_swedish,
-        "Opening price": round(opening_price_historical, price_decimals),
+        #"Opening price": round(opening_price_historical, price_decimals),
+        "Opening price": round(float(opening_price_historical), price_decimals) if opening_price_historical not in ["N/A", ""] else "N/A",
         "Lowest price": round(lowest_price_historical, price_decimals),
         "Lowest price time": lowest_price_time_swedish,
         "Highest price": round(highest_price_historical, price_decimals),
