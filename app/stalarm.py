@@ -124,6 +124,7 @@ for symbol in symbols:
         highest_price_time_swedish = "N/A"
         decrease_limit_reached = "N/A"
         increase_limit_reached_after_decrease_limit_reached = "N/A"
+        start_time_swedish = "N/A"
 
     stock_data.append({
         "Company name": company_name,
