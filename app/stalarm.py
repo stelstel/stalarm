@@ -120,12 +120,12 @@ for symbol in symbols:
         company_name = "N/A"
         start_date = "N/A"
         opening_price_historical = 0
-        lowest_price_historical = "N/A"
+        lowest_price_historical = 0
         lowest_price_time_swedish = "N/A"
-        highest_price_historical = "N/A"
+        highest_price_historical = 0
         highest_price_time_swedish = "N/A"
-        decrease_limit_reached = "N/A"
-        increase_limit_reached_after_decrease_limit_reached = "N/A"
+        decrease_limit_reached = "False"
+        increase_limit_reached_after_decrease_limit_reached = "False"
         start_time_swedish = "N/A"
 
     stock_data.append({
