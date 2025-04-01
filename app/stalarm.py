@@ -114,7 +114,16 @@ for symbol in symbols:
 
     except Exception as e:
         msg_to_user = f"Error fetching data for {symbol}, Is this symbol correct? Check at https://finance.yahoo.com/lookup/"
-        company_name = start_date, opening_price_historical = lowest_price_historical = lowest_price_time_swedish = highest_price_historical = highest_price_time_swedish = decrease_limit_reached = increase_limit_reached_after_decrease_limit_reached = "N/A"
+        # company_name = start_date, opening_price_historical = lowest_price_historical = lowest_price_time_swedish = highest_price_historical = highest_price_time_swedish = decrease_limit_reached = increase_limit_reached_after_decrease_limit_reached = "N/A"
+        company_name = "N/A"
+        start_date = "N/A"
+        opening_price_historical = "N/A"
+        lowest_price_historical = "N/A"
+        lowest_price_time_swedish = "N/A"
+        highest_price_historical = "N/A"
+        highest_price_time_swedish = "N/A"
+        decrease_limit_reached = "N/A"
+        increase_limit_reached_after_decrease_limit_reached = "N/A"
 
     stock_data.append({
         "Company name": company_name,
