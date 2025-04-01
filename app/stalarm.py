@@ -141,10 +141,10 @@ for symbol in symbols:
         "Highest price time": highest_price_time_swedish,
         "Latest price": round(latest_price, price_decimals),
         "Latest price time": latest_price_time_swedish,
-        "Dec. lim. reached": decrease_limit_reached,
         "Dec. lim.": f"{alarm_limit_decrease} %",
-        "Inc. lim. reached after dec. lim. reached":  increase_limit_reached_after_decrease_limit_reached,
-        "Inc. lim.": f"{alarm_limit_increase_after_decrease} %"
+        "Dec. lim. reached": decrease_limit_reached,
+        "Inc. lim.": f"{alarm_limit_increase_after_decrease} %",
+        "Inc. lim. reached after dec. lim. reached":  increase_limit_reached_after_decrease_limit_reached
     })
 
 # Create a DataFrame with the collected data
