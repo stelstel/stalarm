@@ -1,4 +1,5 @@
 Use in PythonAnywhere:
 
-cd your-repo
+cd stalarm
+
 git pull
