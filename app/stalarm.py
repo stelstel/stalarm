@@ -211,8 +211,13 @@ for symbol in symbols:
         highest_price_time_swedish = convert_to_swedish_timezone(highest_price_time)
         latest_price_time_swedish = convert_to_swedish_timezone(latest_price_time)
 
+        decrease_limit_reached = False
+
         decrease_limit_reached = (lowest_price_historical < opening_price_historical and
                                   ((opening_price_historical - lowest_price_historical) / opening_price_historical) * 100 > alarm_limit_decrease)
+        
+        increase_limit_reached_after_decrease = False
+        
         increase_limit_reached_after_decrease = (latest_price > lowest_price_historical * (1 + alarm_limit_increase_after_decrease / 100) and
                                                  decrease_limit_reached)
     except Exception as e:
