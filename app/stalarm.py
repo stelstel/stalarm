@@ -21,6 +21,8 @@ from functions import read_config_ini, custom_sort, convert_to_swedish_timezone
 # Clear console
 os.system('cls')
 
+start_time_swedish = "N/A"
+
 # Read configuration
 symbols, alarm_limit_decrease, alarm_limit_increase_after_decrease, start_date, price_decimals = read_config_ini()
 
