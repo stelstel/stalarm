@@ -217,7 +217,7 @@ for symbol in symbols:
                                   ((opening_price_historical - lowest_price_historical) / opening_price_historical) * 100 > alarm_limit_decrease)
         
         increase_limit_reached_after_decrease = False
-        
+
         increase_limit_reached_after_decrease = (latest_price > lowest_price_historical * (1 + alarm_limit_increase_after_decrease / 100) and
                                                  decrease_limit_reached)
     except Exception as e:
@@ -236,7 +236,7 @@ for symbol in symbols:
         "Latest price time": latest_price_time_swedish,
         "Dec. lim. reached": decrease_limit_reached,
         "Dec. lim.": f"{alarm_limit_decrease} %",
-        "Inc. lim. reached after dec. lim.": increase_limit_reached_after_decrease,
+        "Inc. lim. reached after dec. lim. reached": increase_limit_reached_after_decrease,
         "Inc. lim.": f"{alarm_limit_increase_after_decrease} %"
     })
 
