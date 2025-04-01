@@ -19,9 +19,9 @@
 
 <body>
     <div class="container mt-4">
-        <h1>Stalarm</h1>
+        <img src="{{ url_for('static', filename='images/stalarm_logga_cut.jpg') }}" alt="Logo" id="logo" class="img-fluid mb-4">
         <h2>Stock Data</h2>
-        <table id="stockTable" class="table table-striped stock_data_table">
+        <table id="stockTable" class="table stock_data_table">
             <thead>
                 <tr>
                     {% for column in columns %}

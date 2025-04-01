@@ -10,23 +10,32 @@
     font-weight: bold;
 }
 
-.table.table-striped{
+.table{
     border-spacing: 2px;
     border-collapse: separate;
 }
 
-.table.table-striped thead tr th{
+.table thead tr th{
     background-color: blue;
     color: white;
     vertical-align: top;
 }
 
-.table.table-striped.stock_data_table tr th,
-.table.table-striped.stock_data_table tr td{
+.table.stock_data_table tr th,
+.table.stock_data_table tr td{
     border-radius: 5px;
     padding: 3px;
     border-style: none;
     padding: 0px 8px 0px 8px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Logo*/
+#logo{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 16rem;
 }
 
 /* Make the column "Inc. lim. reached after decrease lim. reached" narrower */
@@ -34,29 +43,27 @@
     width: 7%;
 }
 
-/* Target even rows */
-.table.table-striped.stock_data_table tr:nth-child(even) td {
-    background-color: rgb(150, 200, 150);
+/* Default row. */
+#stockTable.table.stock_data_table tr td {
+    background-color: lightgreen
 }
 
-/* Target odd rows */
-.table.table-striped.stock_data_table tr:nth-child(odd) td {
-    background-color: rgb(175, 200, 175);
+/* True, False row. */
+#stockTable.table.stock_data_table tr.table-warning-custom td {
+    background-color: rgb(252, 252, 199)
 }
 
-#stockTable.table.table-striped.stock_data_table tr.table-warning-custom td {
-    background-color: lightyellow
-}
-
-#stockTable.table.table-striped.stock_data_table tr.table-danger-custom td {
+/* True, True row. */
+#stockTable.table.stock_data_table tr.table-danger-custom td {
     background-color: #ff0000;
     font-weight: bold;
 }
 
-#stockTable.table.table-striped.stock_data_table tbody tr:hover td{
-    background-color: #000000;
-    cursor: pointer;  /* Change the cursor to a pointer */
-    color: rgb(255, 255, 255);
+/* Hover */
+#stockTable.table.stock_data_table tbody tr:hover td{
+    background-color: lightgray;
+    cursor: pointer; /* Change the cursor to a pointer */
+    border: black 1px solid;
 }
 
 

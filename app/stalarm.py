@@ -154,4 +154,4 @@ df_stock_data = pd.DataFrame(stock_data)
 df_stock_data = custom_sort(df_stock_data)
 
 # Display the DataFrame
-print(df_stock_data.to_string(index=False)) # ////////////////////////////////////////////////////////
+# print(df_stock_data.to_string(index=False)) # ////////////////////////////////////////////////////////
